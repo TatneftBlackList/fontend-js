@@ -7,7 +7,6 @@ function Login() {
     const [password, setPassword] = useState('');
     let navigate = useNavigate();
     const {login} = useContext(AuthContext);
-    const grant_type = 'password';
     const handleLogin = async (e) => {
         e.preventDefault();
 

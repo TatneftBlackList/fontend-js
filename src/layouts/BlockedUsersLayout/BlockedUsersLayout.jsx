@@ -13,7 +13,7 @@ function BlockedUsersLayout() {
             });
 
             if (!response.ok) {
-                throw new Error("Error fetching restaurants");
+                // throw new Error("Error fetching restaurants");
             }
 
             const data = await response.json();
@@ -24,16 +24,18 @@ function BlockedUsersLayout() {
         fetchBlockedUsers();
     }, []);
 
+    console.log(blockedUsers)
     return (
         <div>
             <h1>Список пользователей</h1>
+            {blockedUsers != null ?
             <ul>
                 {blockedUsers.map(user => (
                     <li key={user.id}>
                         {user.first_name} {user.last_name} (Номер работы: {user.job_number})
                     </li>
                 ))}
-            </ul>
+            </ul>: "Заблокированных пользователей нет"}
         </div>
     )
 }
