@@ -3,11 +3,11 @@ import {useNavigate} from 'react-router-dom';
 import {AuthContext} from "../../context/AuthProvider";
 
 function Login() {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     let navigate = useNavigate();
     const {login} = useContext(AuthContext);
-
+    const grant_type = 'password';
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -15,19 +15,20 @@ function Login() {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/login`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: JSON.stringify({
-                    email,
+                body: new URLSearchParams({
+                    username,
                     password
-                }),
+                }).toString(),
             });
 
             if (!response.ok) {
                 alert('Login Failed!');
             } else {
                 const data = await response.json();
-                login(data.token);
+                console.log("Bearer " + data.access_token)
+                login("Bearer " + data.access_token);
                 navigate('/');
             }
         } catch (error) {
@@ -43,9 +44,9 @@ function Login() {
                 <div className="input-container">
                     <input
                         type="text"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
                     />
                     <input
                         type="password"
@@ -53,11 +54,11 @@ function Login() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    </div>
-                    <button type="submit">Войти</button>
+                </div>
+                <button type="submit">Войти</button>
             </form>
         </div>
-);
+    );
 };
 
 export default Login;
