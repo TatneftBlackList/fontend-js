@@ -5,7 +5,6 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import Header from "./layouts/Header/Header";
 import Footer from "./layouts/Footer/Footer";
 import {AuthProvider} from "./context/AuthProvider";
-import Login from "./pages/SignInPage/SignInPage";
 import SignInPage from "./pages/SignInPage/SignInPage";
 
 function App() {
