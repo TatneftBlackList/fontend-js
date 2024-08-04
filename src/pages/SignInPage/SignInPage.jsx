@@ -1,14 +1,26 @@
-import React, {useContext, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {AuthContext} from "../../context/AuthProvider";
+import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthProvider";
+import './SignInPage.css';  // Импортируем стили для страницы
 
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     let navigate = useNavigate();
-    const {login} = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
+
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
+
+        if (!username || !password) {
+            setError('Username and password are required');
+            setLoading(false);
+            return;
+        }
 
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/login`, {
@@ -23,16 +35,18 @@ function Login() {
             });
 
             if (!response.ok) {
-                alert('Login Failed!');
+                setError('Login Failed!');
             } else {
                 const data = await response.json();
-                console.log("Bearer " + data.access_token)
+                console.log("Bearer " + data.access_token);
                 login("Bearer " + data.access_token);
                 navigate('/');
             }
         } catch (error) {
-            alert(error);
+            setError('Login failed: ' + error.message);
             console.error('Login failed:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -40,24 +54,27 @@ function Login() {
         <div className="main-container">
             <form onSubmit={handleLogin}>
                 <h2>Войти</h2>
+                {error && <p className="error-message">{error}</p>}
                 <div className="input-container">
                     <input
                         type="text"
-                        placeholder="Username"
+                        placeholder="Логин"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <input
                         type="password"
-                        placeholder="Password"
+                        placeholder="Пароль"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <button type="submit">Войти</button>
+                <button type="submit" disabled={loading}>
+                    {loading ? 'Loading...' : 'Войти'}
+                </button>
             </form>
         </div>
     );
-};
+}
 
 export default Login;
