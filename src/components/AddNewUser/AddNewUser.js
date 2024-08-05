@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import './AddNewUser.css';
-import RefreshToken from "../../context/RefreshToken";
 
 function AddNewUser() {
     const [newUser, setNewUser] = useState({
@@ -23,9 +22,7 @@ function AddNewUser() {
             body: JSON.stringify(newUser)
         });
         const data = await response.json();
-        if (response.status === 401){
-            await RefreshToken();
-        } else if (!response.ok) {
+        if (!response.ok) {
             alert("Ошибка: " + data.detail);
         } else {
             setIsPopupVisible(true);
