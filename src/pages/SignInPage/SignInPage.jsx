@@ -10,7 +10,7 @@ function Login() {
     const [loading, setLoading] = useState(false);
     let navigate = useNavigate();
     const { login } = useContext(AuthContext);
-
+    const { saveRoleToLocalStorage } = useContext(AuthContext);
     const handleLogin = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -40,6 +40,7 @@ function Login() {
                 const data = await response.json();
                 console.log("Bearer " + data.access_token);
                 login("Bearer " + data.access_token);
+                saveRoleToLocalStorage(data.role)
                 navigate('/');
             }
         } catch (error) {

@@ -5,15 +5,19 @@ import {useNavigate} from "react-router-dom";
 function Header() {
 
     let navigate = useNavigate();
-
-    const handleHomeButtonClick = () =>{
+    const role = localStorage.getItem("role")
+    const handleHomeButtonClick = () => {
         navigate("/")
     }
 
+    const handleAdminButtonClick = () =>{
+        navigate("/admin")
+    }
     return (
         <div className="header">
             <Button onClick={handleHomeButtonClick}>Домой</Button>
             <Button className="button accept">Выйти</Button>
+            {role === "ADMIN" ? <Button className="button accept" onClick={handleAdminButtonClick}>Админ</Button> : <div/>}
         </div>
     )
 }
