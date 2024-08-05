@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import './AddNewUser.css';
 
 function AddNewUser() {
     const [newUser, setNewUser] = useState({
@@ -10,6 +11,7 @@ function AddNewUser() {
         roleID: '',
         permissions_id: []
     });
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
 
     const handleAdd = async () => {
         const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/register`, {
@@ -19,33 +21,48 @@ function AddNewUser() {
             },
             body: JSON.stringify(newUser)
         });
-        const data = await response.json()
+        const data = await response.json();
         if (!response.ok) {
-            alert("Ошибка: " + data.detail)
+            alert("Ошибка: " + data.detail);
+        } else {
+            setIsPopupVisible(true);
+            setNewUser({
+                first_name: '',
+                last_name: '',
+                job_number: '',
+                login: '',
+                password: '',
+                roleID: '',
+                permissions_id: []
+            });
         }
-        console.log(data)
+        console.log(data);
         console.log('Adding user:', newUser);
     };
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setNewUser({...newUser, [name]: value});
+        const { name, value } = e.target;
+        setNewUser({ ...newUser, [name]: value });
     };
 
     const handlePermissionChange = (e) => {
-        const {value, checked} = e.target;
+        const { value, checked } = e.target;
         const selectedPermissions = newUser.permissions_id;
         if (checked) {
-            setNewUser({...newUser, permissions_id: [...selectedPermissions, Number(value)]});
+            setNewUser({ ...newUser, permissions_id: [...selectedPermissions, Number(value)] });
         } else {
-            setNewUser({...newUser, permissions_id: selectedPermissions.filter((perm) => perm !== Number(value))});
+            setNewUser({ ...newUser, permissions_id: selectedPermissions.filter((perm) => perm !== Number(value)) });
         }
     };
 
+    const handleClosePopup = () => {
+        setIsPopupVisible(false);
+    };
+
     return (
-        <>
-            <h2>Add User</h2>
-            <form onSubmit={(e) => {
+        <div className="add-user-container">
+            <h2>Добавление пользователя</h2>
+            <form className="add-user-form" onSubmit={(e) => {
                 e.preventDefault();
                 handleAdd();
             }}>
@@ -54,7 +71,7 @@ function AddNewUser() {
                     name="first_name"
                     value={newUser.first_name}
                     onChange={handleChange}
-                    placeholder="Enter first name"
+                    placeholder="Введите имя"
                     required
                 />
                 <input
@@ -62,7 +79,7 @@ function AddNewUser() {
                     name="last_name"
                     value={newUser.last_name}
                     onChange={handleChange}
-                    placeholder="Enter last name"
+                    placeholder="Введите фамилию"
                     required
                 />
                 <input
@@ -70,7 +87,7 @@ function AddNewUser() {
                     name="job_number"
                     value={newUser.job_number}
                     onChange={handleChange}
-                    placeholder="Enter job number"
+                    placeholder="Введите табельный номер"
                     required
                 />
                 <input
@@ -78,7 +95,7 @@ function AddNewUser() {
                     name="login"
                     value={newUser.login}
                     onChange={handleChange}
-                    placeholder="Enter login email"
+                    placeholder="Введите эл почту"
                     required
                 />
                 <input
@@ -86,7 +103,7 @@ function AddNewUser() {
                     name="password"
                     value={newUser.password}
                     onChange={handleChange}
-                    placeholder="Enter password"
+                    placeholder="Введите пароль"
                     required
                 />
                 <select
@@ -99,7 +116,7 @@ function AddNewUser() {
                     <option value="1">Администратор</option>
                     <option value="2">Пользователь</option>
                 </select>
-                <div>
+                <div className="permissions">
                     <label>
                         <input
                             type="checkbox"
@@ -128,10 +145,20 @@ function AddNewUser() {
                         Обновление заблокированных пользователей
                     </label>
                 </div>
-                <button type="submit">Confirm</button>
+                <button type="submit">Добавить</button>
             </form>
-        </>
-    )
+
+            {isPopupVisible && (
+                <div className="popup">
+                    <div className="popup-content">
+                        <span className="close" onClick={handleClosePopup}>&times;</span>
+                        <p>Пользователь успешно добавлен!</p>
+                        <button onClick={handleClosePopup}>ОК</button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default AddNewUser;
