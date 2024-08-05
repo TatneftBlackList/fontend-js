@@ -10,14 +10,29 @@ body {
     height: 100vh;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    width: 80%;
+    max-width: 800px;
+    margin: 20px;
+}
+
+h1 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
 .user-list {
     list-style: none;
     padding: 0;
-    width: 300px;
-    margin: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
 .user-list-item {
@@ -25,39 +40,55 @@ body {
     padding: 15px;
     border-bottom: 1px solid #ddd;
     transition: background 0.3s ease;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    background: #fff;
 }
 
 .user-list-item:hover {
     background: #f0f0f0;
 }
 
+.user-list-item span {
+    font-weight: bold;
+    color: #555;
+}
+
 .user-details {
-    margin-top: 20px;
-    padding: 20px;
+    margin-top: 10px;
+    padding: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #ffffff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+    width: 100%;
+    display: none; /* скрываем блок по умолчанию */
+}
+
+.user-details.show {
+    display: block; /* показываем блок, если класс "show" добавлен */
 }
 
 .user-details h3 {
     margin-top: 0;
+    color: #333;
 }
 
 .user-details p {
-    margin: 5px 0;
+    margin: 10px 0;
+    color: #555;
 }
 
 .user-details h4 {
     margin-top: 15px;
+    color: #333;
 }
 
 /* Адаптация для мобильных устройств */
 @media only screen and (max-width: 768px) {
-    .user-list {
-        width: 80%;
-        margin: 10px;
+    .container {
+        width: 90%;
+        padding: 15px;
     }
 
     .user-list-item {
@@ -65,15 +96,13 @@ body {
     }
 
     .user-details {
-        width: 90%;
         padding: 15px;
     }
 }
 
 @media only screen and (max-width: 480px) {
-    .user-list {
-        width: 100%;
-        margin: 5px;
+    .container {
+        width: 95%;
     }
 
     .user-list-item {
@@ -81,7 +110,6 @@ body {
     }
 
     .user-details {
-        width: 95%;
         padding: 10px;
     }
 
