@@ -1,0 +1,23 @@
+.button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background: #fda085;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.button:hover {
+    background: #f6d365;
+}
+
+.button.accept {
+    background: #f64646; /* Красный цвет для кнопки "Выйти" */
+}
+
+.button.accept:hover {
+    background: #f08a8a;
+}
