@@ -132,6 +132,7 @@
     background-color: #fff;
     border-top: 1px solid #ccc;
     animation: fadeIn 0.3s ease-in-out;
+    position: relative;
 }
 
 .user-details h3 {
@@ -151,4 +152,23 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+.edit__user{
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    padding: 4px 12px;
+    border-radius: 5px ;
+    background-color: green;
+    color: white;
+
+}
+.delete__user{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    background: #f32e2e;
+    padding: 4px 12px;
+    border-radius: 5px ;
+    color: white;
 }
