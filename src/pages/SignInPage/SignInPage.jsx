@@ -52,8 +52,8 @@ function Login() {
 
     return (
         <div className="main-container">
-            <form onSubmit={handleLogin}>
-                <h2>Войти</h2>
+            <h2 className='form__title'>Войти</h2>
+            <form className="form__container" onSubmit={handleLogin}>
                 {error && <p className="error-message">{error}</p>}
                 <div className="input-container">
                     <input

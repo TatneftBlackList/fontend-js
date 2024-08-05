@@ -3,6 +3,8 @@ import {useNavigate} from "react-router";
 import {useEffect, useState} from "react";
 
 
+
+
 function HomePage() {
     const navigate = useNavigate();
 
@@ -16,6 +18,7 @@ function HomePage() {
     return (
         <>
             <BlockedUsersLayout/>
+
         </>
     )
 }

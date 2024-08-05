@@ -1,0 +1,27 @@
+.main-container{
+    display: flex;
+    justify-content: center;
+   background: rgba(128, 128, 128, 0.5);
+    margin-top: 10px;
+    padding:70px 0 70px 0 ;
+        border-radius: 24px;
+}
+.form{
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    padding: 35px 80px;
+    background: white;
+
+}
+.input-container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+}
+.sign__button{
+    margin: 20px 0 0 60px;
+}
+
+

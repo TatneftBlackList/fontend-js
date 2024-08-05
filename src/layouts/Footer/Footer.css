@@ -1,9 +1,14 @@
 .footer{
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0 10px;
-    width: 100%;
-    transition: bottom 0.5s ease;
-    align-items: center ;
+    margin-top: 15px;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 24px;
+    -webkit-box-shadow: 0px -2px 14px 9px rgba(34, 60, 80, 0.26);
+    -moz-box-shadow: 0px -2px 14px 9px rgba(34, 60, 80, 0.26);
+    box-shadow: 0px -2px 14px 9px rgba(34, 60, 80, 0.26);
+}
+.footer__title{
+    padding: 20px;
 }

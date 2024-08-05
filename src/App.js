@@ -11,7 +11,7 @@ function App() {
 
     return (
         <div className="App">
-            <Header/>
+
             <AuthProvider>
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
@@ -19,7 +19,7 @@ function App() {
                     <Route path="/login" element={<SignInPage/>}/>
                     <Route path="/register" element={<SignInPage/>}/>
                 </Routes>
-                <Footer/>
+               
             </AuthProvider>
         </div>
     );

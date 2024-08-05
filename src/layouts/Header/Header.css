@@ -1,0 +1,27 @@
+.header{
+    max-width: 1200px;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    margin: 0 auto;
+    border-radius: 30px;
+    padding: 0 35px;
+    -webkit-box-shadow: 4px 1px 6px 10px rgba(34, 60, 80, 0.31);
+    -moz-box-shadow: 4px 1px 6px 10px rgba(34, 60, 80, 0.31);
+    box-shadow: 4px 1px 6px 10px rgba(34, 60, 80, 0.31);
+}
+.header__box{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+
+}
+.header__button{
+    cursor: pointer;
+    font-size: 20px;
+    border: 1px solid grey;
+    padding: 5px 10px;
+    border-radius: 12px;
+    align-items: center;
+}
