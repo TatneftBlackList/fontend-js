@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import './DeleteUser.css';
+import RefreshToken from "../../context/RefreshToken";
 
 function DeleteUser() {
     const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,9 @@ function DeleteUser() {
                 },
             });
             const data = await response.json();
+            if (response.status === 401){
+                await RefreshToken();
+            }
             setRecords(Array.isArray(data) ? data : []); // Убедитесь, что данные являются массивом
         } catch (error) {
             console.error('Ошибка при получении записей:', error);
@@ -41,6 +45,9 @@ function DeleteUser() {
                     "Authorization": `${token}`
                 },
             });
+            if (response.status === 401){
+                await RefreshToken();
+            }
             if (response.ok) {
                 setRecords(records.filter(user => user.id !== id)); // Обновляем список пользователей после удаления
                 setIsPopupVisible(true);

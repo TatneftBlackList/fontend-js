@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import AddNewBlockedUnit from '../../components/AddNewBlockeUnit/AddNewBlockedUnit';
 import UpdateBlockedUnit from '../../components/UpdateBlockedUnit/UpdateBlockedUnit';
 import DeleteBlockedUnit from '../../components/DeleteBlockedUnit/DeleteBlockedUnit';
 import Popup from '../../components/popup/Popup';
 import './BlockedUsersLayout.css';
+import RefreshToken from "../../context/RefreshToken";
 
 function BlockedUsersLayout() {
     const [blockedUsers, setBlockedUsers] = useState([]);
@@ -46,7 +47,9 @@ function BlockedUsersLayout() {
                 },
             });
 
-            if (!response.ok) {
+            if (response.status === 401) {
+                await RefreshToken();
+            } else if (!response.ok) {
                 const errorData = await response.json();
                 console.log(errorData);
                 throw new Error("Ошибка при получении списка компаний");
@@ -94,7 +97,7 @@ function BlockedUsersLayout() {
             <h1>Список заблокированных пользователей</h1>
             <button className="open-popup-button" onClick={() => setIsAddPopupOpen(true)}>Добавить пользователя</button>
             <Popup isOpen={isAddPopupOpen} onClose={() => setIsAddPopupOpen(false)}>
-                <AddNewBlockedUnit onAdd={handleAddUser} companies={companies} showSuccessPopup={showSuccessPopup} />
+                <AddNewBlockedUnit onAdd={handleAddUser} companies={companies} showSuccessPopup={showSuccessPopup}/>
             </Popup>
             <Popup isOpen={isSuccessPopupOpen} onClose={() => setIsSuccessPopupOpen(false)} autoCloseDuration={3000}>
                 <p>{successMessage}</p>
@@ -111,13 +114,18 @@ function BlockedUsersLayout() {
                                     <h3>{selectedUser.fio}</h3>
                                     <p><strong>Компания:</strong> {selectedUser.company.name}</p>
                                     <p><strong>Причина:</strong> {selectedUser.reason}</p>
-                                    <p><strong>Дата добавления:</strong> {new Date(selectedUser.date_add_to_list).toLocaleString()}</p>
+                                    <p><strong>Дата
+                                        добавления:</strong> {new Date(selectedUser.date_add_to_list).toLocaleString()}
+                                    </p>
                                     <h4>Паспортные данные:</h4>
                                     <p><strong>Серия паспорта:</strong> {selectedUser.passports.passport_seria}</p>
                                     <p><strong>Номер паспорта:</strong> {selectedUser.passports.passport_number}</p>
-                                    <p><strong>Старая серия паспорта:</strong> {selectedUser.passports.old_passport_seria}</p>
-                                    <p><strong>Старый номер паспорта:</strong> {selectedUser.passports.old_passport_number}</p>
-                                    <DeleteBlockedUnit userId={selectedUser.id} onDelete={handleDeleteUser} showSuccessPopup={showSuccessPopup} />
+                                    <p><strong>Старая серия
+                                        паспорта:</strong> {selectedUser.passports.old_passport_seria}</p>
+                                    <p><strong>Старый номер
+                                        паспорта:</strong> {selectedUser.passports.old_passport_number}</p>
+                                    <DeleteBlockedUnit userId={selectedUser.id} onDelete={handleDeleteUser}
+                                                       showSuccessPopup={showSuccessPopup}/>
                                     {/*<button className="edit__user" onClick={() => setIsUpdatePopupOpen(true)}>Редактировать</button>*/}
                                     {/*<Popup isOpen={isUpdatePopupOpen} onClose={() => setIsUpdatePopupOpen(false)}>*/}
                                     {/*    <UpdateBlockedUnit user={selectedUser} onUpdate={handleUpdateUser} companies={companies} showSuccessPopup={showSuccessPopup} />*/}

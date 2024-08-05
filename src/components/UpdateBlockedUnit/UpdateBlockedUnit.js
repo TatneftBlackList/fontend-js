@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './UpdateBlockedUnit.css';
+import RefreshToken from "../../context/RefreshToken";
 
 function UpdateBlockedUnit({ user, onUpdate, companies, showSuccessPopup }) {
     const [formData, setFormData] = useState({
@@ -48,6 +49,9 @@ function UpdateBlockedUnit({ user, onUpdate, companies, showSuccessPopup }) {
                 body: JSON.stringify(formData)
             });
 
+            if (response.status === 401){
+                await RefreshToken();
+            }
             if (response.ok) {
                 const data = await response.json();
                 onUpdate(data);

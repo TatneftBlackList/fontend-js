@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import './UpdateUser.css';
+import RefreshToken from "../../context/RefreshToken";
 
 function UpdateUser() {
     const [isOpen, setIsOpen] = useState(false);
@@ -28,6 +29,9 @@ function UpdateUser() {
                     "Authorization": token
                 },
             });
+            if (response.status === 401){
+                await RefreshToken();
+            }
             const data = await response.json();
             setRecords(Array.isArray(data) ? data : []); // Убедитесь, что данные являются массивом
         } catch (error) {

@@ -1,7 +1,8 @@
 import React from 'react';
 import './DeleteBlockedUnit.css';
+import RefreshToken from "../../context/RefreshToken";
 
-function DeleteBlockedUnit({ userId, onDelete, showSuccessPopup }) {
+function DeleteBlockedUnit({userId, onDelete, showSuccessPopup}) {
     const handleDelete = async () => {
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/blockedUnits/${userId}`, {
@@ -10,8 +11,9 @@ function DeleteBlockedUnit({ userId, onDelete, showSuccessPopup }) {
                     'Authorization': `${localStorage.getItem('token')}`
                 }
             });
-
-            if (response.ok) {
+            if (response.status === 401) {
+                await RefreshToken();
+            } else if (response.ok) {
                 onDelete(userId);
                 showSuccessPopup('Пользователь успешно удален!');
             } else {
