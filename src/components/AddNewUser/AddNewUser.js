@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import './AddNewUser.css';
 
-function AddNewUser() {
+function AddNewUser({ onClose, showSuccessPopup }) {
     const [newUser, setNewUser] = useState({
         first_name: '',
         last_name: '',
@@ -11,34 +11,6 @@ function AddNewUser() {
         roleID: '',
         permissions_id: []
     });
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
-
-    const handleAdd = async () => {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newUser)
-        });
-        const data = await response.json();
-        if (!response.ok) {
-            alert("Ошибка: " + data.detail);
-        } else {
-            setIsPopupVisible(true);
-            setNewUser({
-                first_name: '',
-                last_name: '',
-                job_number: '',
-                login: '',
-                password: '',
-                roleID: '',
-                permissions_id: []
-            });
-        }
-        console.log(data);
-        console.log('Adding user:', newUser);
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,23 +27,50 @@ function AddNewUser() {
         }
     };
 
-    const handleClosePopup = () => {
-        setIsPopupVisible(false);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(newUser)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setNewUser({
+                    first_name: '',
+                    last_name: '',
+                    job_number: '',
+                    login: '',
+                    password: '',
+                    roleID: '',
+                    permissions_id: []
+                });
+                showSuccessPopup('Пользователь успешно добавлен!');
+                onClose();
+            } else {
+                const errorData = await response.json();
+                alert('Ошибка: ' + errorData.detail);
+            }
+        } catch (error) {
+            console.error('Ошибка при добавлении пользователя:', error);
+        }
     };
 
     return (
-        <div className="add-user-container">
-            <h2>Добавление пользователя</h2>
-            <form className="add-user-form" onSubmit={(e) => {
-                e.preventDefault();
-                handleAdd();
-            }}>
+        <div className="add-new-user-container">
+            <h2>Добавить пользователя</h2>
+            <form onSubmit={handleSubmit}>
                 <input
                     type="text"
                     name="first_name"
                     value={newUser.first_name}
                     onChange={handleChange}
-                    placeholder="Введите имя"
+                    placeholder="Имя"
                     required
                 />
                 <input
@@ -79,7 +78,7 @@ function AddNewUser() {
                     name="last_name"
                     value={newUser.last_name}
                     onChange={handleChange}
-                    placeholder="Введите фамилию"
+                    placeholder="Фамилия"
                     required
                 />
                 <input
@@ -87,7 +86,7 @@ function AddNewUser() {
                     name="job_number"
                     value={newUser.job_number}
                     onChange={handleChange}
-                    placeholder="Введите табельный номер"
+                    placeholder="Табельный номер"
                     required
                 />
                 <input
@@ -95,7 +94,7 @@ function AddNewUser() {
                     name="login"
                     value={newUser.login}
                     onChange={handleChange}
-                    placeholder="Введите эл почту"
+                    placeholder="Эл. почта"
                     required
                 />
                 <input
@@ -103,7 +102,7 @@ function AddNewUser() {
                     name="password"
                     value={newUser.password}
                     onChange={handleChange}
-                    placeholder="Введите пароль"
+                    placeholder="Пароль"
                     required
                 />
                 <select
@@ -146,17 +145,8 @@ function AddNewUser() {
                     </label>
                 </div>
                 <button type="submit">Добавить</button>
+                <button type="button" onClick={onClose}>Закрыть</button>
             </form>
-
-            {isPopupVisible && (
-                <div className="popup">
-                    <div className="popup-content">
-                        <span className="close" onClick={handleClosePopup}>&times;</span>
-                        <p>Пользователь успешно добавлен!</p>
-                        <button onClick={handleClosePopup}>ОК</button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

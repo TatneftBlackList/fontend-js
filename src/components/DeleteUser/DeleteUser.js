@@ -1,102 +1,71 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from 'react';
 import './DeleteUser.css';
 
-function DeleteUser() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [records, setRecords] = useState([]);
-    const [selectedRecordId, setSelectedRecordId] = useState(null);
-    const [isPopupVisible, setIsPopupVisible] = useState(false);
+function DeleteUser({ onClose, showSuccessPopup }) {
+    const [users, setUsers] = useState([]);
+    const [selectedUserId, setSelectedUserId] = useState('');
     const token = localStorage.getItem("token");
 
-    const handleOpenPopup = () => {
-        setIsOpen(true);
-    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/users`, {
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `${token}`
+                    }
+                });
+                const data = await response.json();
+                setUsers(data);
+            } catch (error) {
+                console.error('Ошибка при получении пользователей:', error);
+            }
+        };
 
-    const handleClosePopup = () => {
-        setIsOpen(false);
-    };
+        fetchUsers();
+    }, [token]);
 
-    const handleGetRecords = async () => {
+    const handleDelete = async () => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/users`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${token}`
-                },
-            });
-            const data = await response.json();
-            setRecords(Array.isArray(data) ? data : []); // Убедитесь, что данные являются массивом
-        } catch (error) {
-            console.error('Ошибка при получении записей:', error);
-        }
-    };
-
-    const handleRecordClick = async (id) => {
-        setSelectedRecordId(id);
-        try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/users/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_API_ADDRESS}/users/${selectedUserId}`, {
                 method: 'DELETE',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `${token}`
-                },
+                    'Authorization': `${localStorage.getItem('token')}`
+                }
             });
+
             if (response.ok) {
-                setRecords(records.filter(user => user.id !== id)); // Обновляем список пользователей после удаления
-                setIsPopupVisible(true);
+                showSuccessPopup('Пользователь успешно удален!');
+                setUsers(users.filter(user => user.id !== selectedUserId));
+                setSelectedUserId('');
+                onClose();
             } else {
-                const data = await response.json();
-                alert("Ошибка: " + data.detail);
+                const errorData = await response.json();
+                alert('Ошибка: ' + errorData.detail);
             }
         } catch (error) {
             console.error('Ошибка при удалении пользователя:', error);
-        } finally {
-            setIsOpen(false);
         }
     };
-
-    const handleCloseSuccessPopup = () => {
-        setIsPopupVisible(false);
-    };
-
-    useEffect(() => {
-        if (isOpen) {
-            handleGetRecords();
-        }
-    }, [isOpen]);
 
     return (
         <div className="delete-user-container">
-            <h2>Удаление пользователя</h2>
-            <button className="open-popup-button" onClick={handleOpenPopup}>Открыть окно</button>
-
-            {isOpen && (
-                <div className="popup">
-                    <div className="popup-content">
-                        <span className="close" onClick={handleClosePopup}>&times;</span>
-                        <h2>Список записей</h2>
-                        <ul>
-                            {records.map(user => (
-                                <li key={user.id} onClick={() => handleRecordClick(user.id)}>
-                                    <span>Имя: {user.first_name} </span>
-                                    <span>Табельный номер: {user.job_number} </span>
-                                    <span>ID: {user.id} </span>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            )}
-
-            {isPopupVisible && (
-                <div className="popup">
-                    <div className="popup-content">
-                        <span className="close" onClick={handleCloseSuccessPopup}>&times;</span>
-                        <p>Пользователь успешно удален!</p>
-                        <button onClick={handleCloseSuccessPopup}>ОК</button>
-                    </div>
-                </div>
-            )}
+            <h2>Удалить пользователя</h2>
+            <select
+                name="userId"
+                value={selectedUserId}
+                onChange={(e) => setSelectedUserId(e.target.value)}
+                required
+            >
+                <option value="">Выберите пользователя</option>
+                {users.map(user => (
+                    <option key={user.id} value={user.id}>
+                        {user.first_name} {user.last_name}
+                    </option>
+                ))}
+            </select>
+            <button onClick={handleDelete}>Удалить</button>
+            <button onClick={onClose}>Закрыть</button>
         </div>
     );
 }

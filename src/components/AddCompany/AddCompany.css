@@ -1,31 +1,29 @@
-.update-user-container {
+.add-company-container {
     padding: 20px;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.update-user-container h2 {
+.add-company-container h2 {
     text-align: center;
     color: #333;
     margin-bottom: 20px;
 }
 
-.update-user-container select,
-.update-user-container input {
+.add-company-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-company-container input {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-bottom: 10px;
 }
 
-.update-user-container .permissions {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.update-user-container button {
+.add-company-container button {
     padding: 10px 20px;
     background: #fda085;
     border: none;
@@ -34,9 +32,8 @@
     font-size: 1rem;
     cursor: pointer;
     transition: background 0.3s ease;
-    margin-right: 10px;
 }
 
-.update-user-container button:hover {
+.add-company-container button:hover {
     background: #f6d365;
 }
