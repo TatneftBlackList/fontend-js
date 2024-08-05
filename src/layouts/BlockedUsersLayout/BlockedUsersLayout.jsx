@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './BlockedUsersLayout.css';
-import AddNewUser from "../../components/AddNewUser/AddNewUser";
+
 
 function BlockedUsersLayout() {
     const [blockedUsers, setBlockedUsers] = useState([]);
