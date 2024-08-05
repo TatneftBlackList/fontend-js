@@ -1,0 +1,38 @@
+.add-new-blocked-unit-container {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-new-blocked-unit-container h2 {
+    text-align: center;
+    color: #333;
+}
+
+.add-new-blocked-unit-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.add-new-blocked-unit-container input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.add-new-blocked-unit-container button {
+    padding: 10px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.add-new-blocked-unit-container button:hover {
+    background: #45a049;
+}
